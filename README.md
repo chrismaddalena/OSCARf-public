@@ -1,5 +1,6 @@
 OSCAR-F
 =========
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/V12-Operations/OSCARf-public?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
 
 Python OSINT Platform
 
