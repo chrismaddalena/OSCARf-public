@@ -41,7 +41,7 @@ Please install the python-dev package: example: `apt-get install python-dev`
 
 **Please note that you will need to setup ONE twitter app for you/your business.**
 
-~**You will probably need to use sudo to run the setup script. This is becasue it creates files and directories.**~
+~**You will probably need to use sudo to run the setup script. This is because it creates files and directories.**~
 
 The the readline feature is completely optional.
 
