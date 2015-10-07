@@ -2,12 +2,12 @@
 """Python script to aid in the collection of OSINT data"""
 
 """
-____   ________________   ________                
+____   ________________   ________
 \   \ /   /_   \_____  \  \_____  \ ______  ______
  \   Y   / |   |/  ____/   /   |   \\____ \/  ___/
-  \     /  |   /       \  /    |    \  |_> >___ \ 
+  \     /  |   /       \  /    |    \  |_> >___ \
    \___/   |___\_______ \ \_______  /   __/____  >
-                       \/         \/|__|       \/ 
+                       \/         \/|__|       \/
 v12 operations
 """
 
@@ -152,7 +152,7 @@ def main():
 ###########################
 def socialMenu():
     """Select Social Media Source"""
-    
+
     print """
     1. Twitter
     2. FaceBook
@@ -195,6 +195,7 @@ def twitMenu():
     6. Get count of mentions of another user (last 200 tweets)
     7. Search for tweet
     8. Add user to sqlite db
+    9. Delete all your tweets.
     0. Return
     """
     opt = raw_input("Enter an option: ")
@@ -219,6 +220,9 @@ def twitMenu():
         twitMenu()
     elif opt == "8":
         oscrtwitter.twitlookup(t_api)
+        twitMenu()
+    elif opt == "9":
+        oscrtwitter.batch_delete(t_api)
         twitMenu()
     elif opt == "0":
         main()
@@ -343,13 +347,13 @@ def wscrape():
 
 def getcn():
     sslscan.starter()
-    
+
 def webtools():
     """Menu for web tools"""
     print """
     1. Web Source Scraper
     2. SSL CN grabber
-    
+
     0. Back
     """
     opt = raw_input("Enter an option: ")
@@ -363,7 +367,7 @@ def webtools():
         print "Invalid Option!"
         webtools()
     webtools()
-    
+
 
 if __name__ == "__main__":
     # users may wish to import part of this...

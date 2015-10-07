@@ -195,6 +195,21 @@ def twitSearch(t_api):
         except KeyboardInterrupt:
             return
 
+"""Copied from https://gist.github.com/davej/113241 <- credit where credit is due"""
+def batch_delete(t_api):
+    print "You are about to Delete all tweets from the account @%s." % t_api.verify_credentials().screen_name
+    print "Does this sound ok? There is no undo! Type yes to carry out this action."
+    do_delete = raw_input("> ")
+    if do_delete.lower() == 'yes':
+        for status in tweepy.Cursor(t_api.user_timeline).items():
+            try:
+                t_api.destroy_status(status.id)
+                print "Deleted:", status.id
+            except:
+                print "Failed to delete:", status.id
+            sleep(.5)
+    return
+
 
 def twitlookup(t_api):
     try:
@@ -207,8 +222,7 @@ def twitlookup(t_api):
 
   # check if user is in the SQLite db or not
 
-    c.execute('SELECT count(*) FROM twitter WHERE username = (?)',
-              (targetUsr, ))
+    c.execute('SELECT count(*) FROM twitter WHERE username = (?)',(targetUsr, ))
     data = c.fetchone()[0]
     if data == 0:
         try:
