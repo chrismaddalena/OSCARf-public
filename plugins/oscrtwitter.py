@@ -18,6 +18,9 @@ except:
     print '[+]ERROR: Unable to import the tweepy library installed!!'
     print 'You will not be able to use the twitter collection side of oscar!'
 
+import sys
+import thread
+import os
 
 def hist_tweet(t_api):
     con = ''
@@ -195,6 +198,13 @@ def twitSearch(t_api):
         except KeyboardInterrupt:
             return
 
+def twitdelete(t_api, stat):
+    try:
+        t_api.destroy_status(stat)
+        print "Deleted:", stat
+    except:
+        print "Failed to delete:", stat
+
 """Copied from https://gist.github.com/davej/113241 <- credit where credit is due"""
 def batch_delete(t_api):
     print "You are about to Delete all tweets from the account @%s." % t_api.verify_credentials().screen_name
@@ -203,8 +213,9 @@ def batch_delete(t_api):
     if do_delete.lower() == 'yes':
         for status in tweepy.Cursor(t_api.user_timeline).items():
             try:
-                t_api.destroy_status(status.id)
-                print "Deleted:", status.id
+                #t_api.destroy_status(status.id)
+                thread.start_new_thread(twitdelete, (t_api, status.id,))
+                #print "Deleted:", status.id
             except:
                 print "Failed to delete:", status.id
             sleep(.5)
