@@ -196,6 +196,7 @@ def twitMenu():
     7. Search for tweet
     8. Add user to sqlite db
     9. Delete all your tweets.
+    10. Delete all favorites
     0. Return
     """
     opt = raw_input("Enter an option: ")
@@ -223,6 +224,9 @@ def twitMenu():
         twitMenu()
     elif opt == "9":
         oscrtwitter.batch_delete(t_api)
+        twitMenu()
+    elif opt == "10":
+        oscrtwitter.favdelete(t_api)
         twitMenu()
     elif opt == "0":
         main()

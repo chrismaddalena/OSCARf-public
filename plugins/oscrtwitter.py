@@ -221,6 +221,27 @@ def batch_delete(t_api):
             sleep(.5)
     return
 
+def fdelete(t_api, stat):
+    try:
+        t_api.destroy_favorite(stat)
+        print "Deleted:", stat
+    except:
+        print "Failed to delete:", stat
+
+def favdelete(t_api):
+    print "You are about to Delete all favorites from the account @%s." % t_api.verify_credentials().screen_name
+    print "Does this sound ok? There is no undo! Type yes to carry out this action."
+    do_delete = raw_input("> ")
+    if do_delete.lower() == 'yes':
+        for status in tweepy.Cursor(t_api.favorites).items():
+            try:
+                #t_api.destroy_favorite(status.id)
+                thread.start_new_thread(fdelete, (t_api, status.id,))
+                #print "Deleted:", status.id
+            except:
+                print "Failed to delete:", status.id
+            sleep(.5)
+    return
 
 def twitlookup(t_api):
     try:
