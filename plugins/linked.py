@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup as bsoup
-import requests as req
+#import requests as req
 import mechanize
 #import urllib
 #import urllib2
@@ -177,7 +177,7 @@ def bing(pos, com, saveout):
         time.sleep(2)
     refs = []  # clear temporary array after running
     comp = []  # clear temporary array after running
-    
+
     # now that search is done, do another or return to main
     print """
     End of results...

@@ -1,10 +1,13 @@
 OSCAR-F
-=======
+=========
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/V12-Operations/OSCARf-public?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
 
 Python OSINT Platform
 
 **OSCARf was coded/designed in Linux and Mac. Don't complain if you are running Windows and you cannot get it working**
 Windows support is something that I am going to address at a later date.
+
+**Install scripts are now in beta:** https://github.com/V12-Operations/Install-OSCARf
 
 OSCAR-F is designed to aid in the process of information gathering. It was formed with the idea of not having to open
 so many tabs in a browser.
@@ -38,7 +41,7 @@ Please install the python-dev package: example: `apt-get install python-dev`
 
 **Please note that you will need to setup ONE twitter app for you/your business.**
 
-~**You will probably need to use sudo to run the setup script. This is becasue it creates files and directories.**~
+~**You will probably need to use sudo to run the setup script. This is because it creates files and directories.**~
 
 The the readline feature is completely optional.
 

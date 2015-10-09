@@ -35,8 +35,8 @@ def downloader(res_out, search_query):
 
     outfile = open(res_out, 'a')
     for result in search_query['matches']:
-        outfile.write('--START--')
-        outfile.write('IP: %s' % result['ip_str'])
+        outfile.write('--START--\n')
+        outfile.write('IP: %s \n' % result['ip_str'])
         encout = result['data'].encode('UTF-8')
         #outfile.write(result['data'])
         outfile.write(encout)
@@ -47,9 +47,8 @@ def downloader(res_out, search_query):
             outfile.write(result['hostnames'][0])
         except:
             pass
-        outfile.write('''
-
-''')
+        outfile.write('''''')
+        outfile.write('\n')
         a = result['port']
         b = result['os']
         outfile.write('Port:')
@@ -58,10 +57,8 @@ def downloader(res_out, search_query):
         outfile.write('Detected OS:')
         outfile.write(str(b))
         outfile.write('\n')
-        outfile.write('--END--')
-        outfile.write('''
-
-''')
+        outfile.write('--END--\n\n')
+        outfile.write('''''')
     outfile.close()
 
 

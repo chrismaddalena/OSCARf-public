@@ -18,6 +18,9 @@ except:
     print '[+]ERROR: Unable to import the tweepy library installed!!'
     print 'You will not be able to use the twitter collection side of oscar!'
 
+import sys
+import thread
+import os
 
 def hist_tweet(t_api):
     con = ''
@@ -30,8 +33,7 @@ def hist_tweet(t_api):
             print 'Username: ', user.screen_name
             print 'Follower count: ', user.followers_count
             print '\n'
-            target_tweets = t_api.user_timeline(targetUsr,
-                                                count=num_tweets)
+            target_tweets = t_api.user_timeline(targetUsr,count=num_tweets)
             counter = 0
             for tweet in target_tweets:
                 counter += 1
@@ -61,10 +63,8 @@ def lv_stream(t_auth):
                 print status.author.screen_name.encode('utf-8') + ': ' \
                     + status.text.encode('utf-8')
                 print '\n'
-                saveFile = open('STREAM.csv', 'a')
-                saveFile.write(str(time.ctime()) + ',,'
-                               + status.author.screen_name.encode('utf-8') +
-                               ',,' + status.text.encode('utf-8'))
+                saveFile = open('STREAM_%s.csv' % filt, 'a')
+                saveFile.write(str(time.ctime()) + ',,'+ status.author.screen_name.encode('utf-8') +',,' + status.text.encode('utf-8'))
                 saveFile.write('\n')
                 saveFile.close()
                 return True
@@ -198,6 +198,51 @@ def twitSearch(t_api):
         except KeyboardInterrupt:
             return
 
+def twitdelete(t_api, stat):
+    try:
+        t_api.destroy_status(stat)
+        print "Deleted:", stat
+    except:
+        print "Failed to delete:", stat
+
+"""Copied from https://gist.github.com/davej/113241 <- credit where credit is due"""
+def batch_delete(t_api):
+    print "You are about to Delete all tweets from the account @%s." % t_api.verify_credentials().screen_name
+    print "Does this sound ok? There is no undo! Type yes to carry out this action."
+    do_delete = raw_input("> ")
+    if do_delete.lower() == 'yes':
+        for status in tweepy.Cursor(t_api.user_timeline).items():
+            try:
+                #t_api.destroy_status(status.id)
+                thread.start_new_thread(twitdelete, (t_api, status.id,))
+                #print "Deleted:", status.id
+            except:
+                print "Failed to delete:", status.id
+            sleep(.5)
+    return
+"""
+def fdelete(t_api, stat):
+    try:
+        t_api.destroy_favorite(stat)
+        print "Deleted:", stat
+    except:
+        print "Failed to delete:", stat
+"""
+
+def favdelete(t_api):
+    print "You are about to Delete all favorites from the account @%s." % t_api.verify_credentials().screen_name
+    print "Does this sound ok? There is no undo! Type yes to carry out this action."
+    do_delete = raw_input("> ")
+    if do_delete.lower() == 'yes':
+        for status in tweepy.Cursor(t_api.favorites).items():
+            try:
+                t_api.destroy_favorite(status.id)
+                #thread.start_new_thread(fdelete, (t_api, status.id,))
+                print "Deleted:", status.id
+            except:
+                print "Failed to delete:", status.id
+            sleep(3)
+    return
 
 def twitlookup(t_api):
     try:
@@ -210,8 +255,7 @@ def twitlookup(t_api):
 
   # check if user is in the SQLite db or not
 
-    c.execute('SELECT count(*) FROM twitter WHERE username = (?)',
-              (targetUsr, ))
+    c.execute('SELECT count(*) FROM twitter WHERE username = (?)',(targetUsr, ))
     data = c.fetchone()[0]
     if data == 0:
         try:

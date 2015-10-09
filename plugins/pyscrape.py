@@ -27,8 +27,7 @@ def downloader(url, filename):
                 print ""
                 now = datetime.datetime.now()
                 stime = str(time.ctime())
-                hardFile = "pasteebin/downloaded/{0}-{1}.txt".format(filename,
-                                                                     stime)
+                hardFile = "pasteebin/downloaded/{0}-{1}.txt".format(filename,stime)
                 file = open(hardFile, 'w')
                 file.write(data)
                 file.close

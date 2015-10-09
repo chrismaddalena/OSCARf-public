@@ -90,26 +90,26 @@ def FBInfo():
 def FBUsr():
     FBurl = 'https://graph.facebook.com/'
     peopleInput = raw_input('How many people would you like to lookup?: ')
-    people = 0; # set to 0 to skip if user input is invalid
+    people = 0 # set to 0 to skip if user input is invalid
     myCounter = 1
-    
+
     # validate user input
     try:
         people = int(peopleInput)
     except ValueError:
-        print("INVALID INPUT: Enter a number...")
-    
+        print "INVALID INPUT: Enter a number..."
+
     while myCounter <= people:
         print '\n'
         print 'Please enter the username of the person - type ''exit!'' to quit'
         print 'EX: bobsmith3'
         userName = raw_input(': ')
         fullURL = FBurl + userName
-        
+
         # bail out early if the user chooses to exit
-        if (userName == "exit!"):
+        if userName == "exit!":
             return
-        
+
         try:
             try:
                 #data = urllib2.urlopen(fullURL)

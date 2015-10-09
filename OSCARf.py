@@ -1,4 +1,15 @@
 #!/usr/bin/env python
+"""Python script to aid in the collection of OSINT data"""
+
+"""
+____   ________________   ________
+\   \ /   /_   \_____  \  \_____  \ ______  ______
+ \   Y   / |   |/  ____/   /   |   \\____ \/  ___/
+  \     /  |   /       \  /    |    \  |_> >___ \
+   \___/   |___\_______ \ \_______  /   __/____  >
+                       \/         \/|__|       \/
+v12 operations
+"""
 
 #External libraries needed to use oscar:
 #twitter
@@ -12,19 +23,10 @@
 #On exception it will alert the user
 import urllib2
 
-#try:
-#    urllib2.urlopen("https://google.com", timeout=10)
-#except urllib2.URLError:
-#    print "[+]ERROR: Could not detect an active internet connection.",
-#    print "An internet connection is required to use OSCAR-F"
-#    exit()
-
-#import csv
 import sys
-#import json
 import os
 import time
-#import re
+
 
 try:
     import readline
@@ -34,18 +36,7 @@ except:
 #################
 # LOCAL IMPORTS #
 #################
-from plugins import pyscrape
-from plugins import linked
-from plugins import ipinfo
-from plugins import newsfeed
-from plugins import fblookup
-from plugins import oscrtwitter
-from plugins import oshodan
-from plugins import portlook
-from plugins import instag
-from plugins import webscrape
-from plugins import asciis
-from plugins import domainip
+from plugins import *
 
 #----Why 2 twitter libs?----#
 #The auth for the twitter lib is nicer as it can create an auth file
@@ -55,7 +46,7 @@ from plugins import domainip
 # the application. You will not be prompted for a pin after getting a
 #token.
 #----END----#
-#imports for the streaming lib
+# imports for the streaming lib
 
 try:
     import tweepy
@@ -90,7 +81,7 @@ try:
     try:
         (oauth_token, oauth_token_secret) = read_token_file(TOKEN_FILE)
     except IOError, e:
-        print "Please run the TWITTERSETUP.py file to get the token file!"
+        print "Please run the setup.py file to get your token file!"
         exit()
 
     t_auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
@@ -100,7 +91,10 @@ except:
     t_auth = None
     t_api = None
 
+__author__ = "NinjaSl0th - @ninjasl0th"
+
 def main():
+    """Main Function"""
     time.sleep(3)
     try:
         os.system('clear')
@@ -123,7 +117,7 @@ def main():
         -------------
         5. Pastebin Scraper
         -------------
-        6. Web Source File Scraper
+        6. Web Tools
         -------------
 
         0. Exit OSCAR
@@ -141,7 +135,8 @@ def main():
         elif opt == "5":
             pasteScrape()
         elif opt == "6":
-            wscrape()
+            webtools()
+            #wscrape()
         elif opt == "0":
             print "Thanks for using OSCAR!"
             sys.exit(0)
@@ -149,13 +144,15 @@ def main():
             print "You entered an invalid option!"
             main()
     except (KeyboardInterrupt):
-            main()
+        main()
 
 
 ###########################
 #-- Social Media Menu   --#
 ###########################
 def socialMenu():
+    """Select Social Media Source"""
+
     print """
     1. Twitter
     2. FaceBook
@@ -185,6 +182,7 @@ def socialMenu():
 
 
 def twitMenu():
+    """Menu for twitter"""
     if t_auth is None or t_api is None:
         print "Twitter is disabled; please install an API key for twitter"
         return
@@ -197,6 +195,8 @@ def twitMenu():
     6. Get count of mentions of another user (last 200 tweets)
     7. Search for tweet
     8. Add user to sqlite db
+    9. Delete all your tweets.
+    10. Delete all favorites
     0. Return
     """
     opt = raw_input("Enter an option: ")
@@ -222,6 +222,12 @@ def twitMenu():
     elif opt == "8":
         oscrtwitter.twitlookup(t_api)
         twitMenu()
+    elif opt == "9":
+        oscrtwitter.batch_delete(t_api)
+        twitMenu()
+    elif opt == "10":
+        oscrtwitter.favdelete(t_api)
+        twitMenu()
     elif opt == "0":
         main()
     else:
@@ -234,6 +240,7 @@ def twitMenu():
 ########################
 
 def fbMenu():
+    """Facebook Menu"""
     print """
     1. Get user info - Raw JSON Dump/Not Formatted
     2. Get user info - Formatted, Lookup multiple users
@@ -254,6 +261,7 @@ def fbMenu():
 
 
 def instachek():
+    """Initiate Instagram username checker"""
     usernom = raw_input("Enter username: ")
     instag.checker(usernom)
     socialMenu()
@@ -264,6 +272,7 @@ def instachek():
 
 
 def news():
+    """Launch the newsfeed reader"""
     newsfeed.newsStart()
     main()
 
@@ -272,6 +281,7 @@ def news():
 #-- IP Info --#
 ###############
 def ipInfo():
+    """IP Address lookup function"""
     ip = raw_input("Enter IP: ")
     ip = ip.rstrip()
     ipinfo.lookup(ip)
@@ -279,11 +289,13 @@ def ipInfo():
 
 
 def prtLook():
+    """Function to call the portlookup lib"""
     portlook.lookup()
     networkMod()
 
 
 def networkMod():
+    """Function to choose what network lookup tool to use"""
     print """
     1. Lookup IP Address
     2. Port Lookup (SANS website)
@@ -309,6 +321,7 @@ def networkMod():
 #- Pastebin Scraper -#
 ######################
 def pasteScrape():
+    """Initiate pastebin scraper"""
     try:
         pyscrape.starter()
     except KeyboardInterrupt:
@@ -317,6 +330,7 @@ def pasteScrape():
 
 
 def linkedin():
+    """Start linkedin search tool"""
     linked.start()
     time.sleep(5)
     if linked.saveout:
@@ -325,13 +339,39 @@ def linkedin():
 
 
 def oscrShodan():
+    """Call/launch the Shodan module"""
     oshodan.menu()
     main()
 
 
 def wscrape():
+    """Call/launch the web scraper module"""
     webscrape.scrape()
     main()
+
+def getcn():
+    sslscan.starter()
+
+def webtools():
+    """Menu for web tools"""
+    print """
+    1. Web Source Scraper
+    2. SSL CN grabber
+
+    0. Back
+    """
+    opt = raw_input("Enter an option: ")
+    if opt == "1":
+        wscrape()
+    elif opt == "2":
+        getcn()
+    elif opt == "0":
+        main()
+    else:
+        print "Invalid Option!"
+        webtools()
+    webtools()
+
 
 if __name__ == "__main__":
     # users may wish to import part of this...
